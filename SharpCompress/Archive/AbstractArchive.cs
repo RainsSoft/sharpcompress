@@ -129,7 +129,7 @@ namespace SharpCompress.Archive
         {
             get { return lazyVolumes.Cast<IVolume>(); }
         }
-
+        public bool IsDisposed { get { return disposed; } }
         private bool disposed;
 
         public virtual void Dispose()
