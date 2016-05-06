@@ -95,43 +95,38 @@ namespace SharpCompress.Writer.Zip
         private int WriteHeader(string filename, DateTime? modificationTime) {
             return WriteHeader(filename, modificationTime, null);
         }
-        private int WriteHeader(string filename, DateTime? modificationTime, CompressionInfo compressionInfo )
-        {
+        private int WriteHeader(string filename, DateTime? modificationTime, CompressionInfo compressionInfo) {
             var explicitZipCompressionInfo = compressionInfo != null ? new ZipCompressionInfo(compressionInfo) : this.zipCompressionInfo;
             byte[] encodedFilename = ArchiveEncoding.Default.GetBytes(filename);
 
             OutputStream.Write(BitConverter.GetBytes(ZipHeaderFactory.ENTRY_HEADER_BYTES), 0, 4);
-		    if (explicitZipCompressionInfo.Compression == ZipCompressionMethod.Deflate)
-		    {
-			    OutputStream.Write(new byte[] {20, 0}, 0, 2); //older version which is more compatible 
-		    }
-		    else
-		    {
-			    OutputStream.Write(new byte[] {63, 0}, 0, 2); //version says we used PPMd or LZMA
-		    }            
+            if (explicitZipCompressionInfo.Compression == ZipCompressionMethod.Deflate) {
+                OutputStream.Write(new byte[] { 20, 0 }, 0, 2); //version
+            }
+            else {
+                OutputStream.Write(new byte[] { 63, 0 }, 0, 2); //version
+            }
             HeaderFlags flags = ArchiveEncoding.Default == Encoding.UTF8 ? HeaderFlags.UTF8 : (HeaderFlags)0;
-            if (!OutputStream.CanSeek)
-            {
+            if (!OutputStream.CanSeek) {
                 flags |= HeaderFlags.UsePostDataDescriptor;
-                if (explicitZipCompressionInfo.Compression == ZipCompressionMethod.LZMA)
-                {
+                if (explicitZipCompressionInfo.Compression == ZipCompressionMethod.LZMA) {
                     flags |= HeaderFlags.Bit1; // eos marker
                 }
             }
-            OutputStream.Write(BitConverter.GetBytes((ushort) flags), 0, 2);
+            OutputStream.Write(BitConverter.GetBytes((ushort)flags), 0, 2);
             OutputStream.Write(BitConverter.GetBytes((ushort)explicitZipCompressionInfo.Compression), 0, 2); // zipping method
             //OutputStream.Write(BitConverter.GetBytes(modificationTime.DateTimeToDosTime()), 0, 4);
             OutputStream.Write(BitConverter.GetBytes((Utility.DateTimeToDosTime(modificationTime))), 0, 4);
             // zipping date and time
-            OutputStream.Write(new byte[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 12);
+            OutputStream.Write(new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 0, 12);
             // unused CRC, un/compressed size, updated later
-            OutputStream.Write(BitConverter.GetBytes((ushort) encodedFilename.Length), 0, 2); // filename length
-            OutputStream.Write(BitConverter.GetBytes((ushort) 0), 0, 2); // extra length
+            OutputStream.Write(BitConverter.GetBytes((ushort)encodedFilename.Length), 0, 2); // filename length
+            OutputStream.Write(BitConverter.GetBytes((ushort)0), 0, 2); // extra length
             OutputStream.Write(encodedFilename, 0, encodedFilename.Length);
 
             return 6 + 2 + 2 + 4 + 12 + 2 + 2 + encodedFilename.Length;
-        }
 
+        }
         private void WriteFooter(uint crc, uint compressed, uint uncompressed)
         {
             OutputStream.Write(BitConverter.GetBytes(crc), 0, 4);
