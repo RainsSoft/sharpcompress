@@ -391,6 +391,23 @@
         /// </summary>
         public void Save() {
             if (this.IsOpen) {
+                using (MemoryStream ms = new MemoryStream()) {
+                    this.ZipTarget.SaveTo(ms, new SharpCompress.Common.CompressionInfo() {
+                        DeflateCompressionLevel = SharpCompress.Compressor.Deflate.CompressionLevel.BestSpeed,
+                        Type = SharpCompress.Common.CompressionType.Deflate
+                    }
+                        );//保存内存
+                    this.Close();
+                    ms.Position = 0L;
+                    using (FileStream fs = new FileStream(this.ConnString, FileMode.Create, FileAccess.Write)) {
+                        const int bufSize = 1024 * 16;//16k
+                        byte[] buf = new byte[bufSize];
+                        int bytesRead = 0;
+                        while ((bytesRead = ms.Read(buf, 0, bufSize)) > 0)
+                            fs.Write(buf, 0, bytesRead);
+                    }
+                }
+                return;
                 string temp = this.ConnString + "." + Guid.NewGuid().ToString("N");
                 using (FileStream fs = new FileStream(temp, FileMode.Create, FileAccess.Write)) {
                     this.ZipTarget.SaveTo(fs,
