@@ -216,17 +216,17 @@
     /// <summary>
     /// 文件包接口
     /// </summary>
-    public interface IFilePacker
+    public interface IFileSysPacker
     {
-        IFilePackerStrategy AddFileTable(string name);
-        IFilePackerStrategy GetFileTable(string name);
+        IFileSysPackerStrategy AddFileTable(string name);
+        IFileSysPackerStrategy GetFileTable(string name);
         void DelFileTable(string name);
         void RenameFileTable(string tableName, string newName);
         int GetFileTableList(out List<string> ret);
         bool IsTableExists(string name);
-        void BeginUpdate(IFilePackerStrategy file);
+        void BeginUpdate(IFileSysPackerStrategy file);
         void BeginUpdate(string name);
-        void EndUpdate(IFilePackerStrategy file, bool success);
+        void EndUpdate(IFileSysPackerStrategy file, bool success);
         void EndUpdate(string name, bool success);
         void Close();
     }
@@ -234,10 +234,10 @@
     /// <summary>
     /// 文件访问接口
     /// </summary>
-    public interface IFilePackerStrategy
+    public interface IFileSysPackerStrategy
     {
 
-        IFilePacker Packer {
+        IFileSysPacker Packer {
             get;
         }
         [Obsolete("不支持文件路径的隐式增加")]

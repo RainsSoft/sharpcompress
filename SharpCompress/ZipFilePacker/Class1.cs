@@ -3,7 +3,8 @@
 //using System.Text;
 //using System.IO;
 
-//namespace ClassLibrary1 {
+//namespace ClassLibrary1
+//{
 //    class Test
 //    {
 //        static void test() {
@@ -40,7 +41,8 @@
 //            scene.Dispose();
 //        }
 //    }
-//    public interface IFileInfo : IDisposable {
+//    public interface IFileInfo : IDisposable
+//    {
 //        string Name {
 //            get;
 //            set;
@@ -61,7 +63,8 @@
 //    /// <summary>
 //    /// 实体文件列表项
 //    /// </summary>
-//    public class IRQ_ExtFile {
+//    public class IRQ_ExtFile
+//    {
 //        public bool NeedSave {
 //            get;
 //            set;
@@ -75,7 +78,8 @@
 //            set;
 //        }
 //    }
-//    public class IRQ_VPLFile : IFileInfo {
+//    public class IRQ_VPLFile : IFileInfo
+//    {
 //        #region IFileInfo 成员
 
 //        public string Name {
@@ -111,7 +115,8 @@
 //        #endregion
 //    }
 
-//    public class IRQ_RobotFile : IFileInfo {
+//    public class IRQ_RobotFile : IFileInfo
+//    {
 //        #region IFileInfo 成员
 
 //        public string Name {
@@ -147,7 +152,8 @@
 //        #endregion
 //    }
 
-//    public class IRQ_SceneFile : IFileInfo {
+//    public class IRQ_SceneFile : IFileInfo
+//    {
 //        private IFileSerializer m_serializer = new IRQ_SceneFile_ZipFileSerializer();
 //        public IRQ_SceneFile() {
 //            this.ExtFile = new List<IRQ_ExtFile>();
@@ -235,7 +241,8 @@
 //    /// <summary>
 //    /// 普通的各种文件
 //    /// </summary>
-//    public class IRQ_NormalFile : IFileInfo {
+//    public class IRQ_NormalFile : IFileInfo
+//    {
 
 //        #region IFileInfo 成员
 
@@ -272,7 +279,8 @@
 //        #endregion
 //    }
 
-//    public interface IFilePacker {
+//    public interface IFilePacker
+//    {
 //        string Name {
 //            get;
 //            set;
@@ -281,7 +289,8 @@
 //        IFileAccess Get(string name);
 
 //    }
-//    public interface IFileAccess {
+//    public interface IFileAccess
+//    {
 //        string Name {
 //            get;
 //            set;
@@ -301,7 +310,8 @@
 //    /// <summary>
 //    /// 本地基于目录和zip的文件系统
 //    /// </summary>
-//    public class LFSFilePacker : IFilePacker {
+//    public class LFSFilePacker : IFilePacker
+//    {
 //        Dictionary<string, IFileAccess> m_dict = new Dictionary<string, IFileAccess>();
 //        #region IFilePacker 成员
 
@@ -326,7 +336,8 @@
 //    /// <summary>
 //    /// 本地基于目录的文件访问
 //    /// </summary>
-//    public class LFSFileAccess : IFileAccess {
+//    public class LFSFileAccess : IFileAccess
+//    {
 //        private List<IFileInfo> m_list = new List<IFileInfo>();
 //        private string IndexFile = "index.json";
 
@@ -389,7 +400,8 @@
 //        #endregion
 //    }
 
-//    public class HTTPFilePacker : IFilePacker {
+//    public class HTTPFilePacker : IFilePacker
+//    {
 
 //        #region IFilePacker 成员
 
@@ -405,7 +417,8 @@
 //        #endregion
 //    }
 
-//    public class HTTPFileAccess : IFileAccess {
+//    public class HTTPFileAccess : IFileAccess
+//    {
 
 //        #region IFileAccess 成员
 
@@ -456,7 +469,8 @@
 //    /// <summary>
 //    /// 文件解析/序列化接口
 //    /// </summary>
-//    public interface IFileSerializer : IDisposable {
+//    public interface IFileSerializer : IDisposable
+//    {
 
 
 //        void LightDeSerialize(IFileInfo obj, byte[] data);
@@ -477,7 +491,8 @@
 //    //}
 
 
-//    public class IRQ_VPLFile_ZipFileSerializer : IFileSerializer {
+//    public class IRQ_VPLFile_ZipFileSerializer : IFileSerializer
+//    {
 
 //        #region IFileSerializer<IRQ_RobotFile> 成员
 
@@ -512,7 +527,8 @@
 //        #endregion
 //    }
 
-//    public class IRQ_RobotFile_ZipFileSerializer : IFileSerializer {
+//    public class IRQ_RobotFile_ZipFileSerializer : IFileSerializer
+//    {
 
 //        #region IFileSerializer<IRQ_RobotFile> 成员
 
@@ -542,7 +558,8 @@
 //    /// <summary>
 //    /// 基于zip的场景文件解析/序列化
 //    /// </summary>
-//    public class IRQ_SceneFile_ZipFileSerializer : IFileSerializer {
+//    public class IRQ_SceneFile_ZipFileSerializer : IFileSerializer
+//    {
 //        string m_temp;
 //        #region IFileSerializer<IRQ_SceneFile> 成员
 
@@ -600,7 +617,8 @@
 
 
 
-//    public class IRQ_NormalFile_BinaryFileSerializer : IFileSerializer {
+//    public class IRQ_NormalFile_BinaryFileSerializer : IFileSerializer
+//    {
 
 //        #region IFileSerializer<IRQ_NormalFile> 成员
 
@@ -630,7 +648,8 @@
 //        #endregion
 //    }
 
-//    public static class Utility {
+//    public static class Utility
+//    {
 //        static string TEMP {
 //            get {
 //#if UNITY3D
@@ -709,7 +728,8 @@
 //    /// <summary>
 //    /// 文件访问服务
 //    /// </summary>
-//    public static class FileService {
+//    public static class FileService
+//    {
 //        public static T Load<T>(IFileAccess fa, string filename, Func<string, int, bool> cb) where T : IFileInfo, new() {
 //            if (cb != null) {
 //                fa.Process += cb;

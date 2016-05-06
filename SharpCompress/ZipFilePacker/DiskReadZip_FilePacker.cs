@@ -9,7 +9,7 @@
     using SharpCompress;
     //由于subnet的fileinfo没有修改时间等基本信息，所以原有的文件系统不太适应，使用压缩文件为存储
     //基于磁盘的文件系统(压缩) 
-    public class DiskReadZip_FilePacker : IFilePacker
+    public class DiskReadZip_FilePacker : IFileSysPacker
     {
         //文件分为2级 一个是packer，一个是table
         /// <summary>
@@ -172,7 +172,7 @@
         /// </summary>
         /// <param name="tableName"></param>
         /// <returns></returns>
-        public IFilePackerStrategy AddFileTable(string tableName) {
+        public IFileSysPackerStrategy AddFileTable(string tableName) {
             if (string.IsNullOrEmpty(tableName)) {
                 throw new ArgumentNullException(tableName);
             }
@@ -181,7 +181,7 @@
                 if (IsTableExists(tableName)) throw new DiskZip_AccessPackerException(tableName + "已经存在", null);
 
                 DiskReadZip_ConnectInfo m_Conn = CheckConnection(tableName);
-                IFilePackerStrategy ret = new DiskReadZip_FileTable(this, m_Conn);
+                IFileSysPackerStrategy ret = new DiskReadZip_FileTable(this, m_Conn);
                 ret.Name = tableName;
                 //建立SQLite_FileItemInfo结构的表名
                 //m_Conn.CreateTable<SQLite_FileItemInfo>();
@@ -193,14 +193,14 @@
             return null;
         }
 
-        public IFilePackerStrategy GetFileTable(string tableName) {
+        public IFileSysPackerStrategy GetFileTable(string tableName) {
             if (string.IsNullOrEmpty(tableName)) {
                 throw new ArgumentNullException(tableName);
             }
             if (!IsTableExists(tableName)) return null;
             DiskReadZip_ConnectInfo m_Conn = CheckConnection(tableName);
 
-            IFilePackerStrategy ret = new DiskReadZip_FileTable(this, m_Conn);
+            IFileSysPackerStrategy ret = new DiskReadZip_FileTable(this, m_Conn);
             ret.Name = tableName;
             return ret;
         }
@@ -281,7 +281,7 @@
         /// <summary>
         /// 打开压缩包
         /// </summary>
-        public void BeginUpdate(IFilePackerStrategy file) {
+        public void BeginUpdate(IFileSysPackerStrategy file) {
             string tableName = file.Name;
             BeginUpdate(tableName);
         }
@@ -300,7 +300,7 @@
         /// </summary>
         /// <param name="file"></param>
         /// <param name="success">false：放弃修改，直接关闭。true：先保存到缓存，完成后覆盖到当前</param>
-        public void EndUpdate(IFilePackerStrategy file, bool success) {
+        public void EndUpdate(IFileSysPackerStrategy file, bool success) {
             string tableName = file.Name;
             EndUpdate(tableName, success);
         }
@@ -465,7 +465,7 @@
     /// 结构
     /// FileDir,FileName,FileData,FileLen
     /// </summary>
-    internal class DiskReadZip_FileTable : IFilePackerStrategy
+    internal class DiskReadZip_FileTable : IFileSysPackerStrategy
     {
         /// <summary>
         /// 一份关联
@@ -479,7 +479,7 @@
             //m_buf = arg;
             m_Packer = packer;
         }
-        public IFilePacker Packer {
+        public IFileSysPacker Packer {
             get { return m_Packer; }
         }
         /// <summary>

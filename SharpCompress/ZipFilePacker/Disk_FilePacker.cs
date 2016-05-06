@@ -8,7 +8,7 @@
     using IRobotQ.Packer;
     using SharpCompress;
 
-    internal class Disk_FilePacker : IFilePacker
+    internal class Disk_FilePacker : IFileSysPacker
     {
         /// <summary>
         /// 根目录
@@ -79,7 +79,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public IFilePackerStrategy AddFileTable(string name) {
+        public IFileSysPackerStrategy AddFileTable(string name) {
             if (string.IsNullOrEmpty(name)) {
                 throw new ArgumentNullException(name);
             }
@@ -93,7 +93,7 @@
             return m_Tables[name];
         }
 
-        public IFilePackerStrategy GetFileTable(string name) {
+        public IFileSysPackerStrategy GetFileTable(string name) {
             if (string.IsNullOrEmpty(name)) {
                 throw new ArgumentNullException(name);
             }
@@ -177,7 +177,7 @@
         }
 
         bool m_InUpdateState = false;
-        public void BeginUpdate(IFilePackerStrategy file) {
+        public void BeginUpdate(IFileSysPackerStrategy file) {
             string tableName = file.Name;
             BeginUpdate(tableName);
         }
@@ -187,7 +187,7 @@
             m_Tables[name].BeginUpdate();
         }
 
-        public void EndUpdate(IFilePackerStrategy file, bool success) {
+        public void EndUpdate(IFileSysPackerStrategy file, bool success) {
             string tableName = file.Name;
             EndUpdate(tableName, success);
 
@@ -206,7 +206,7 @@
 
         #endregion
     }
-    internal class Disk_FileTable : IFilePackerStrategy
+    internal class Disk_FileTable : IFileSysPackerStrategy
     {
 
         internal Disk_FileTable(Disk_FilePacker packer, string name, string tableRootDir) {
@@ -246,7 +246,7 @@
             set;
         }
         private Disk_FilePacker m_Packer;
-        public IFilePacker Packer {
+        public IFileSysPacker Packer {
             get { return m_Packer; }
         }
         List<DiskZip_ConnectInfo> m_InUpdateConnZips = new List<DiskZip_ConnectInfo>();

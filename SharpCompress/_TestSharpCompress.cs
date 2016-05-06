@@ -29,7 +29,7 @@ namespace SharpCompress
            //return;
             //
             //增加文件
-            IFilePackerStrategy fps = ResourceService.GetLib(IRQ_FileType.TempLeadInRes);
+            IFileSysPackerStrategy fps = ResourceService.GetLib(IRQ_FileType.TempLeadInRes);
             FileStream fsadd = new FileStream("mypack.data.zip", FileMode.Open, FileAccess.Read);
             byte[] buf_add = new byte[fsadd.Length];
             fsadd.Read(buf_add, 0, buf_add.Length);
@@ -258,8 +258,8 @@ namespace SharpCompress
         static IRQ_Packer m_tempData;
         static IRQ_Packer m_sysData_RobotVPL;
 
-        static Dictionary<IRQ_FileType, IFilePackerStrategy> Libs = new Dictionary<IRQ_FileType, IFilePackerStrategy>();
-        public static IFilePackerStrategy GetLib(string tableName) {
+        static Dictionary<IRQ_FileType, IFileSysPackerStrategy> Libs = new Dictionary<IRQ_FileType, IFileSysPackerStrategy>();
+        public static IFileSysPackerStrategy GetLib(string tableName) {
             foreach (var v in Libs.Keys) {
                 int i = Libs[v].Name.LastIndexOf(Path.DirectorySeparatorChar);
                 //
@@ -270,7 +270,7 @@ namespace SharpCompress
             }
             return null;
         }
-        public static IFilePackerStrategy GetLib(IRQ_FileType fileTyp) {
+        public static IFileSysPackerStrategy GetLib(IRQ_FileType fileTyp) {
             if (Libs.ContainsKey(fileTyp))
                 return Libs[fileTyp];
             else {
@@ -278,8 +278,8 @@ namespace SharpCompress
             }
             return null;
         }
-        public static List<IFilePackerStrategy> GetLibs(IRQ_FileType fileTyp) {
-            List<IFilePackerStrategy> filepacks = new List<IFilePackerStrategy>();
+        public static List<IFileSysPackerStrategy> GetLibs(IRQ_FileType fileTyp) {
+            List<IFileSysPackerStrategy> filepacks = new List<IFileSysPackerStrategy>();
             //          
             if ((fileTyp & IRQ_FileType.CtrlFile) != 0) {
                 filepacks.Add(Libs[IRQ_FileType.CtrlFile]);
@@ -332,75 +332,75 @@ namespace SharpCompress
             }
             return filepacks;
         }
-        public static IFilePackerStrategy TempLeadInResLib;
+        public static IFileSysPackerStrategy TempLeadInResLib;
         /// <summary>
         /// 用户机器人库
         /// </summary>
-        public static IFilePackerStrategy UserRobotLib;
+        public static IFileSysPackerStrategy UserRobotLib;
         /// <summary>
         /// 用户场景库
         /// </summary>
-        public static IFilePackerStrategy UserSceneLib;
+        public static IFileSysPackerStrategy UserSceneLib;
         /// <summary>
         /// 用户程序库
         /// </summary>
-        public static IFilePackerStrategy UserCtrlLib;
+        public static IFileSysPackerStrategy UserCtrlLib;
 
         /// <summary>
         /// 用户配置库
         /// </summary>
-        public static IFilePackerStrategy UserSettingLib;
+        public static IFileSysPackerStrategy UserSettingLib;
         /// <summary>
         /// 用户快速启动包库
         /// </summary>
-        public static IFilePackerStrategy QuickLanchLib;
+        public static IFileSysPackerStrategy QuickLanchLib;
         /// <summary>
         /// 在线系统场景库
         /// </summary>
-        public static IFilePackerStrategy OnLineSceneLib;
+        public static IFileSysPackerStrategy OnLineSceneLib;
 
         /// <summary>
         /// 离线场景库
         /// </summary>
-        public static IFilePackerStrategy OfflineSceneLib;
+        public static IFileSysPackerStrategy OfflineSceneLib;
 
         /// <summary>
         /// 用户完整仿真包
         /// </summary>
-        public static IFilePackerStrategy FullSimpackLib;
+        public static IFileSysPackerStrategy FullSimpackLib;
         /// <summary>
         /// 场景模板
         /// </summary>
-        public static IFilePackerStrategy TemplateSceneLib;
+        public static IFileSysPackerStrategy TemplateSceneLib;
         /// <summary>
         /// VPL模板
         /// </summary>
-        public static IFilePackerStrategy TemplateVPLLib;
+        public static IFileSysPackerStrategy TemplateVPLLib;
         /// <summary>
         /// 机器人模板
         /// </summary>
-        public static IFilePackerStrategy TemplateRobotLib;
+        public static IFileSysPackerStrategy TemplateRobotLib;
         //以下为特殊的
         /// <summary>
         /// 系统机器人
         /// </summary>
-        public static IFilePackerStrategy SystemRobotLib;
+        public static IFileSysPackerStrategy SystemRobotLib;
         /// <summary>
         /// 系统控制程序
         /// </summary>
-        public static IFilePackerStrategy SystemCtrlLib;
+        public static IFileSysPackerStrategy SystemCtrlLib;
         /// <summary>
         /// 系统快速仿真包
         /// </summary>
-        public static IFilePackerStrategy SystemQuickSimPackLib;
+        public static IFileSysPackerStrategy SystemQuickSimPackLib;
         /// <summary>
         /// 机器人临时文件存放
         /// </summary>
-        public static IFilePackerStrategy TempUserRobotLib;
+        public static IFileSysPackerStrategy TempUserRobotLib;
         /// <summary>
         ///控制程序临时文件存放
         /// </summary>
-        public static IFilePackerStrategy TempUserCtrlLib;
+        public static IFileSysPackerStrategy TempUserCtrlLib;
 
 
 
