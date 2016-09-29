@@ -111,7 +111,7 @@ namespace SharpCompress.IO
                     new_offset = _os_originalOffset + _of_length + offset;
                     goto case SeekOrigin.Current;
                 case SeekOrigin.Current:
-                    if ((new_offset < _os_originalOffset) || (new_offset >= (_os_originalOffset + _of_length))) {
+                    if ((new_offset < _os_originalOffset) || (new_offset > (_os_originalOffset + _of_length))) {
                         throw new Exception(
                             "OffsetStream.Seek() outside offset stream limits" +
                             String.Format(", parms({0},{1})", offset, origin.ToString()) +
