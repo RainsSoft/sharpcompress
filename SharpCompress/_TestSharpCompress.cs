@@ -16,6 +16,58 @@ namespace SharpCompress
     static class _TestSharpCompress
     {
         public static void Main(string[] args) {
+            //测试序列化
+
+            List<IRQ_VPLDocInfo_Json> vpldocjsons = new List<IRQ_VPLDocInfo_Json>();
+            for(int i=0;i<1;i++){
+                IRQ_VPLDocInfo_Json docjs = new IRQ_VPLDocInfo_Json();
+                docjs.Author = "me_"+i.ToString();
+                docjs.CodeType = VPL_CodeType.CSharp;
+                docjs.CreateDate = DateTime.Now;
+                docjs.Description = "";
+                docjs.IsCodeMode = false;
+                docjs.IsNoRobotMode = true;
+                docjs.LastUpdate = DateTime.Now;
+                docjs.NoRobotMode_LastPlatId = "";
+                docjs.OnCloudSvr = false;
+                docjs.PackageUniqueId = "";
+                docjs.PackageVersion = "2.0";
+                docjs.Source = IRQ_FileDocSource.User;
+                docjs.Ver = "2.0";
+                vpldocjsons.Add(docjs);
+            }
+            string docJsonStr = SimpleJsonEx.SimpleJson.SerializeObject(vpldocjsons);
+            using (FileStream fs = new FileStream("test_array.json", FileMode.OpenOrCreate, FileAccess.Write)) {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.UTF8)) {
+                    sw.Write(docJsonStr);
+                }
+            }
+            //反序列化
+            string docJosnStr2 = "";
+            using (StreamReader sr = new StreamReader("test_array.json", Encoding.UTF8)) {
+                docJosnStr2 = sr.ReadToEnd();
+            }
+            List<IRQ_VPLDocInfo_Json> redocJsons = SimpleJsonEx.SimpleJson.DeserializeObject<List<IRQ_VPLDocInfo_Json>>(docJosnStr2);
+
+            char[] invalid1 = Path.GetInvalidFileNameChars();
+            char[] invalid2 = Path.GetInvalidPathChars();
+            List<char> invalidChars = new List<char>();
+            invalidChars.AddRange(invalid1);
+            for (int i = 0; i < invalid2.Length; i++) {
+                if (invalidChars.Contains(invalid2[i]) == false) {
+                    invalidChars.Add(invalid2[i]);
+                }
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < invalidChars.Count; i++) {
+                sb.Append(string.Format("{0}",(int)invalidChars[i]));
+                if(i!=invalidChars.Count-1){
+                    sb.Append(",");
+                }
+            }
+            string chars = sb.ToString();
+            Console.WriteLine(chars);
+            // "'\"','<','>','|','\0','','','','','','','\a','\b','\t','\n','\v','\f','\r','','','','','','','','','','','','','','','','','','',':','*','?','\\','/'"
             int timestart = Environment.TickCount;
             ResourceService.Init();
            // Stopwatch swRead = new Stopwatch();
@@ -173,7 +225,118 @@ namespace SharpCompress
             }
         }
     }
-
+    public class IRQ_VPLDocInfo_Json
+    {
+        /// <summary>
+        /// 序列化函数 必须有公开构造函数
+        /// </summary>
+        public IRQ_VPLDocInfo_Json() {
+            this.AttachFiles = new List<string>();
+            this.Author = "";
+            this.CodeType = VPL_CodeType.CSharp;
+            this.CreateDate = DateTime.Now;
+            this.Description = "";
+            this.IsCodeMode = false;
+            this.IsNoRobotMode = true;
+            this.LastUpdate = DateTime.Now;
+            this.Name = "undefinevpl";
+            this.NoRobotMode_LastPlatId = "";
+            this.OnCloudSvr = false;
+            this.PackageUniqueId = "";
+            this.PackageVersion = "";
+            this.Source = IRQ_FileDocSource.User;
+            this.UserDefines = new Dictionary<string, string>();
+            this.Ver = "2.0";
+        }
+        public string Name { get; set; }
+        public string Ver { get; set; }
+        public DateTime LastUpdate { get; set; }
+        public IRQ_FileDocSource Source { get; set; }
+        public bool OnCloudSvr { get; set; }
+        public List<string> AttachFiles { get; set; }
+        //
+        public string Author { get; set; }
+        public VPL_CodeType CodeType { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string Description { get; set; }
+        public bool IsCodeMode { get; set; }
+        public bool IsNoRobotMode { get; set; }
+        public string NoRobotMode_LastPlatId { get; set; }
+        public string PackageUniqueId { get; set; }
+        public string PackageVersion { get; set; }
+        public Dictionary<string, string> UserDefines { get; set; }
+        //public static IRQ_VPLDocInfo_Json CreateBy(IRQ_VPLDocInfo vpldoc) {
+        //    IRQ_VPLDocInfo_Json docjs = new IRQ_VPLDocInfo_Json();
+        //    docjs.CopyFrom(vpldoc);
+        //    return docjs;
+        //}
+       
+        public static string ToJson(IRQ_VPLDocInfo_Json vpldoc) {
+            string js = SimpleJsonEx.SimpleJson.SerializeObject(vpldoc);
+            return js;
+        }
+        public static IRQ_VPLDocInfo_Json LoadFromJson(string vpldoc_json) {
+            IRQ_VPLDocInfo_Json doc = SimpleJsonEx.SimpleJson.DeserializeObject<IRQ_VPLDocInfo_Json>(vpldoc_json);
+            return doc;
+        }
+    }
+    public enum IRQ_FileDocSource : byte
+    {
+        /// <summary>
+        /// 暂时作为大厅任务专用???
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// 自己制作
+        /// </summary>
+        User = 1,
+        /// 系统文件
+        /// </summary>
+        System = 2,
+        /// <summary>
+        /// 临时
+        /// </summary>
+        Temp = 4
+    }
+    /// <summary>
+    /// 生成代码类型
+    /// </summary>
+    public enum VPL_CodeType
+    {
+        /// <summary>
+        /// 不生成
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// C/C++语言
+        /// </summary>
+        C = 1,
+        /// <summary>
+        /// c#
+        /// </summary>
+        CSharp = 2,
+        /// <summary>
+        /// VB.net
+        /// </summary>
+        VB = 3,
+        /// <summary>
+        /// java
+        /// </summary>
+        Java = 4,
+        /// <summary>
+        /// javascript
+        /// </summary>
+        Js = 5,
+        /// <summary>
+        /// lua
+        /// </summary>
+        Lua = 6,
+        Python = 7,
+        /// <summary>
+        /// logo
+        /// </summary>
+        Logo = 8
+    }
     public enum IRQ_FileType : int
     {
         UnKnow,

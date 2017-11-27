@@ -296,6 +296,7 @@
     <Compile Include="Common\ArchiveType.cs" />
     <Compile Include="Reader\Tar\TarReader.cs" />
     <Compile Include="ReadOnlyCollection.cs" />
+    <Compile Include="Test\simple_json.cs" />
     <Compile Include="VersionInfo.cs" />
     <Compile Include="Archive\Rar\FileInfoRarArchiveVolume.cs" />
     <Compile Include="Common\Rar\RarFilePart.cs" />
